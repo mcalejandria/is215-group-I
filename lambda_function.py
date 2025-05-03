@@ -8,9 +8,14 @@ import requests
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 
-API_KEY = os.environ['OPENAI_API_KEY']
-API_URL = os.environ['OPENAI_API_URL']
-S3_BUCKET = os.environ['BUCKET_NAME']
+IS_LIVE = os.environ.get('IS_LIVE', 'false').lower() == 'true'
+
+suffix = '_LIVE' if IS_LIVE else ''
+
+API_KEY = os.environ[f'OPENAI_API_KEY{suffix}']
+API_URL = os.environ[f'OPENAI_API_URL{suffix}']
+API_MODEL = os.environ[f'OPENAI_API_MODEL{suffix}']
+S3_BUCKET = os.environ[f'BUCKET_NAME{suffix}']
 
 # Enable CORS
 CORS_HEADERS = {
@@ -51,7 +56,7 @@ def lambda_handler(event, context):
 
         # Generate ChatGPT API Payload
         payload = {
-            "model": "gpt-3.5-turbo",
+            "model": API_MODEL,
             "messages": [
                 {
                     "role": "system",
@@ -108,11 +113,15 @@ def lambda_handler(event, context):
 
 # ENVIRONMENT VARIABLE IN LAMBDA
 
-# OPENAI_API_KEY=loyola-K1o3sImAuH
+# OPENAI_API_KEY=
 # OPENAI_API_URL=https://is215-openai.upou.io/v1/chat/completions
+# OPENAI_API_MODEL=gpt-3.5-turbo
 # BUCKET_NAME=blog-generator-storage
-
-
+# IS_LIVE=false|true
+# OPENAI_API_KEY_LIVE=
+# OPENAI_API_URL_LIVE=https://api.openai.com/v1/chat/completions
+# OPENAI_API_MODEL_LIVE=gpt-4-turbo-2024-04-09
+        
 # LAMBDA LAYER
 
 # arn:aws:lambda:us-east-1:770693421928:layer:Klayers-p312-requests:4
