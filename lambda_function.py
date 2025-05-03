@@ -5,6 +5,7 @@ import uuid
 import json
 import requests
 
+# Initialize libraries
 s3 = boto3.client('s3')
 rekognition = boto3.client('rekognition')
 
@@ -16,11 +17,12 @@ try:
     API_KEY = os.environ[f'OPENAI_API_KEY{suffix}']
     API_URL = os.environ[f'OPENAI_API_URL{suffix}']
     API_MODEL = os.environ[f'OPENAI_MODEL{suffix}']
-    S3_BUCKET = os.environ[f'BUCKET_NAME{suffix}']
+    S3_BUCKET = os.environ['BUCKET_NAME']
 except KeyError as e:
     print(f"Missing environment variable: {e}")
     raise
 
+# Feed CORS headers
 CORS_HEADERS = {
     "Content-Type": "text/plain",
     "Access-Control-Allow-Origin": "*",
@@ -141,7 +143,6 @@ def lambda_handler(event, context):
             "headers": CORS_HEADERS,
             "body": f"Error: {str(e)}"
         }
-
 
 # ENVIRONMENT VARIABLE IN LAMBDA
 
