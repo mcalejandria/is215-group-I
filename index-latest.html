@@ -21,7 +21,7 @@
         <div class="header">
           <h1>Image to Blog Story</h1>
         </div>
-        <div class="content">
+        <div id="content" class="content">
           <div id="dropzone" class="dropzone" onclick="fileInput.click()">
             <p>Drag & Drop or Click to Upload Image</p>
             <input type="file" id="fileInput" accept="image/*" hidden />
@@ -47,7 +47,7 @@
 
   <script>
     const fileInput = document.getElementById('fileInput');
-    const dropzone = document.getElementById('dropzone');
+    const dropzone = document.getElementById('content');
     const preview = document.getElementById('preview');
     const previewImg = document.getElementById('previewImg');
     const generateBtn = document.getElementById('generateBtn');
@@ -108,7 +108,7 @@
             loading.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       try {
-        const response = await fetch("LAMBDA_API_URL", {
+        const response = await fetch("https://kjm60kraqg.execute-api.us-east-1.amazonaws.com/default/is215-group-1", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
