@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <title>Image to Blog Generator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-size: cover;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    
+.custom-file-label {
+  display: block;
+  width: fit-content;
+  margin: 20px auto;              /* Center horizontally */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+  border-radius: 30px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.custom-file-label i {
+  margin-right: 8px;
+  
+}
+
+.custom-file-label:hover {
+  background: linear-gradient(135deg, #303f9f, #3949ab);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}    
+
+   
+
+    .container {
+      max-width: 700px;
+      margin: 5vh auto;
+      background-color: rgb(200, 191, 191);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+
+    .container.dragover {
+      background-color: #cdeacc;
+      border: 2px dashed #4CAF50;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 1rem auto;
+    }
+
+  button {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+    #loading {
+      display: none;
+      text-align: justify;
+      margin-bottom: 1rem;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #preview {
+      display: none;
+      text-align: justify;
+      margin-bottom: 1rem;
+    }
+
+    #preview img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+   #result {
+  background: #ffffff;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  border-left: 6px solid #4CAF50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  }
+
+  #result h3, #result h2 {
+  color: #4CAF50;
+  margin-top: 1rem;
+}
+
+#result strong {
+  color: #2e7d32;
+}
+   
+    button i {
+    margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="dropZone">
+  <h2> Upload Image and Click button to Generate a Blog Story</h2>
+  
+  <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+  <label for="fileInput" class="custom-file-label">
+  <i class="fas fa-image"></i> Click to Upload an Image File
+  </label>
+ 
+  <p id="fileName" style="text-align:center; font-style: italic; margin-top: 10px; color: #333;">No file selected</p>
+ 
+
+  <button onclick="upload()">
+  <i class="bi bi-upload"></i> Generate story for Uploaded Image </button>
+    
+  <h2>Drag and Drop an Image Anywhere to Generate a Blog Story</h2>
+  <div id="preview"> 
+    <img id="uploadedImage" src="#" alt="Image Preview" />
+  </div>
+  <br>
+  <button onclick="clearUpload()">Remove image</button> 
+  <br>
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Generating your blog story...</p>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+
+<script>
+  
+ async function upload() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const resultBox = document.getElementById('result');
+    const loadingBox = document.getElementById('loading');
+    const previewBox = document.getElementById('preview');
+    const imageElement = document.getElementById('uploadedImage');
+
+    if (!file) return alert("Please select an image to upload.");
+
+    resultBox.textContent = "";
+    loadingBox.style.display = "block";
+    previewBox.style.display = "none";
+
+    const reader = new FileReader();
+    reader.onloadend = async function () {
+      const dataUrl = reader.result;
+      const base64Data = dataUrl.split(',')[1];
+
+      imageElement.src = dataUrl;
+      previewBox.style.display = "block";
+
+      try {
+        const response = await fetch("https://whh7j94pd5.execute-api.us-east-1.amazonaws.com/prod/image-to-blog", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: file.name,
+            content_type: file.type,
+            image_base64: base64Data
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Server responded with ${response.status} ${response.statusText}: ${errorText}`);
+        }
+
+        const resultText = await response.text();
+
+        if (!resultText || resultText.trim().length < 10) {
+          throw new Error("Received an empty or invalid response from the server.");
+        }
+
+        resultBox.innerHTML = resultText;
+
+      } catch (error) {
+        console.error("Upload error:", error);
+        resultBox.innerHTML = `
+          <p style="color: red;">💀 <strong>Error generating blog story:</strong> ${error.message}</p>
+          <p>Please try again later or contact support if the issue persists.</p>
+        `;
+      } finally {
+        loadingBox.style.display = "none";
+      }
+    };
+
+    reader.onerror = function () {
+      loadingBox.style.display = "none";
+      resultBox.innerHTML = `
+        <p style="color: red;">❌ Failed to read the image file. Please try another image.</p>
+      `;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+
+
+  // Drag & Drop 
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    fileInput.files = files;
+
+    // Update filename display
+    const fileNameElement = document.getElementById('fileName');
+    fileNameElement.textContent = `Selected file: ${files[0].name}`;
+
+    upload();
+  }
+});
+
+
+  function clearUpload() {
+    const fileInput = document.getElementById('fileInput');
+    const fileNameElement = document.getElementById('fileName'); 
+    const resultBox = document.getElementById('result');
+    const previewBox = document.getElementById('preview');
+    const imageElement = document.getElementById('uploadedImage');
+    const loadingBox = document.getElementById('loading');
+
+
+    fileNameElement.textContent = "No file selected";
+    fileInput.value = "";
+    imageElement.src = "#";
+    previewBox.style.display = "none";
+    loadingBox.style.display = "none";
+    resultBox.innerHTML = "";
+  }
+
+// File name display on selection
+
+fileInput.addEventListener('change', function (event) {
+  const file = event.target.files[0];
+  const fileNameElement = document.getElementById('fileName');
+  fileNameElement.textContent = file ? `Selected file: ${file.name}` : 'No file selected';
+});
+
+</script>
+
+</body>
+</html>

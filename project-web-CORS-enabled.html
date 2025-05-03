@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image to Blog Generator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 5vh auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 1rem auto;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #loading {
+      display: none;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #preview {
+      display: none;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    #preview img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    #result {
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 5px;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Upload an Image to Generate a Blog Story</h2>
+
+  <input type="file" id="fileInput" accept="image/*" />
+  <button onclick="upload()">Upload & Generate</button>
+
+  <div id="preview"> 
+    <img id="uploadedImage" src="#" alt="Image Preview" />
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Generating your blog story...</p>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  async function upload() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const resultBox = document.getElementById('result');
+    const loadingBox = document.getElementById('loading');
+    const previewBox = document.getElementById('preview');
+    const imageElement = document.getElementById('uploadedImage');
+
+    if (!file) return alert("Please select an image to upload.");
+
+    resultBox.textContent = "";
+    loadingBox.style.display = "block";
+    previewBox.style.display = "none";
+
+    const reader = new FileReader();
+    reader.onloadend = async function () {
+      const dataUrl = reader.result;
+      const base64Data = dataUrl.split(',')[1];
+
+      // Show image preview
+      imageElement.src = dataUrl;
+      previewBox.style.display = "block";
+
+      try {
+        const response = await fetch("https://whh7j94pd5.execute-api.us-east-1.amazonaws.com/prod/image-to-blog", { // API to be changed
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: file.name,
+            content_type: file.type,
+            image_base64: base64Data
+          })
+        });
+
+        const resultText = await response.text();
+        resultBox.innerHTML = resultText;
+      } catch (error) {
+        resultBox.textContent = "❌ Error: " + error.message;
+      } finally {
+        loadingBox.style.display = "none";
+      }
+    };
+
+    reader.readAsDataURL(file);
+  }
+</script>
+
+</body>
+</html>
