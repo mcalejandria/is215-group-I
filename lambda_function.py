@@ -44,6 +44,7 @@ def lambda_handler(event, context):
         file_name = body.get("filename", f"{uuid.uuid4()}.jpg")
         content_type = body.get("content_type", "image/jpeg")
         image_base64 = body.get("image_base64")
+        tone = body.get("tone", "casual")  # Default to casual tone if not provided
 
         if not image_base64:
             raise ValueError("Missing image data in request.")
@@ -107,7 +108,7 @@ def lambda_handler(event, context):
                 },
                 {
                     "role": "user",
-                    "content": f"Please write a fun, creative blog story using the following labels as inspiration: {label_text}"
+                    "content": f"Please write a fun, creative blog story using the following labels as inspiration: {label_text}. The story should be written in a {tone} tone."
                 }
             ]
         }
