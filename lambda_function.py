@@ -87,8 +87,8 @@ def lambda_handler(event, context):
                 {
                     "role": "system",
                     "content": (
-                        "You are a skilled creative writer, journalist, and documentarian. "
-                        "Your task is to generate a blog post in clean HTML format, based on visual labels from an image."
+                         "Hi chat, you are a veteran journalist and has been in the industry already for more than half of your life. You are a decorated news writer and editorial writer, skilled creative writer, and a documentarian. With this experience and credibility, you are tasked to write news articles or editorials based on an image. You are expected follow the news writing structure, and cite credible links or resources. With editorial you can do that as well. Always output a news article by default. You can randomly give me an editorial at times."
+                        "Additionally, your task is to generate your writing in clean HTML format, blog post like, based on visual labels from an image."
                     )
                 },
                 {
@@ -108,7 +108,7 @@ def lambda_handler(event, context):
                 },
                 {
                     "role": "user",
-                    "content": f"Please write a fun, creative blog story using the following labels as inspiration: {label_text}. The story should be written in a {tone} tone."
+                    "content": f"Remember, you are a veteran journalist and writer. Please write a fun, creative blog story OR a good news article (you can choose between the two which you want to write) using the following labels as inspiration: {label_text}. The story should be written in a {tone} tone."
                 }
             ]
         }
