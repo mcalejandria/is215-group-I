@@ -490,58 +490,64 @@
       document.body.removeChild(a);
     }
 
-  // Download as PDF
-  function downloadPdf() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+// Download as PDF
+function downloadPdf() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
 
-    const storyContent = document.getElementById('story').innerText;
-    const imageDataUrl = generateBtn.dataset.imageData;
+  const storyContent = document.getElementById('story').innerHTML; // Use innerHTML to retain formatting
+  const imageDataUrl = generateBtn.dataset.imageData;
 
-    const img = new Image();
-    img.src = imageDataUrl;
+  const img = new Image();
+  img.src = imageDataUrl;
 
-    img.onload = function () {
-      const pageWidth = pdf.internal.pageSize.width;
-      const pageHeight = pdf.internal.pageSize.height;
+  img.onload = function () {
+    // Get PDF page dimensions
+    const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
 
-      const maxImageHeight = pageHeight / 4;
-      const maxImageWidth = pageWidth - 30;
-      let imgWidth = img.width;
-      let imgHeight = img.height;
+    // Calculate image dimensions to fit within one-quarter of the page
+    const maxImageHeight = pageHeight / 4; // Maximum height is one-quarter of the page
+    const maxImageWidth = pageWidth - 30; // Leave some margin on the sides
+    let imgWidth = img.width;
+    let imgHeight = img.height;
 
-      if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
-        const widthRatio = maxImageWidth / imgWidth;
-        const heightRatio = maxImageHeight / imgHeight;
-        const scaleRatio = Math.min(widthRatio, heightRatio);
-        imgWidth *= scaleRatio;
-        imgHeight *= scaleRatio;
-      }
+    // Scale the image dimensions proportionally
+    if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
+      const widthRatio = maxImageWidth / imgWidth;
+      const heightRatio = maxImageHeight / imgHeight;
+      const scaleRatio = Math.min(widthRatio, heightRatio);
+      imgWidth *= scaleRatio;
+      imgHeight *= scaleRatio;
+    }
 
-      const imgX = (pageWidth - imgWidth) / 2;
-      const imgY = 15;
+    // Calculate the x position to center the image
+    const imgX = (pageWidth - imgWidth) / 2; // Center the image horizontally
+    const imgY = 15; // Keep the image at the top with a margin of 15
 
-      pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+    // Add the scaled and centered image to the PDF
+    pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
 
-      const storyY = imgY + imgHeight + 10;
-      const margin = 15;
-      const maxWidth = 180;
+    // Create a temporary container to hold the HTML content
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = storyContent; // Add the story HTML content
+    tempContainer.style.fontFamily = 'Arial, sans-serif'; // Optional: Set a default font family
 
-      const lines = pdf.splitTextToSize(storyContent, maxWidth);
-      let cursorY = storyY;
-
-      lines.forEach((line) => {
-        if (cursorY + 10 > pageHeight - margin) {
-          pdf.addPage();
-          cursorY = margin;
-        }
-        pdf.text(line, margin, cursorY);
-        cursorY += 10;
-      });
-
-      pdf.save('generated_blog.pdf');
-    };
-  }
+    // Render the HTML content below the image
+    const storyY = imgY + imgHeight + 10; // Position below the image
+    pdf.html(tempContainer, {
+      callback: function (pdf) {
+        // Save the PDF
+        pdf.save('generated_blog.pdf');
+      },
+      x: 10, // X offset for the text
+      y: storyY, // Y offset (below the image)
+      width: 180, // Maximum width of the content
+      windowWidth: 800, // Simulate a smaller viewport width for scaling
+      scale: 0.8, // Scale down the content to 80% of its original size
+    });
+  };
+}
 
     // Render History
     function renderHistory() {
@@ -614,53 +620,66 @@
       document.body.removeChild(a);
     }
 
-  // Download as PDF from Modal
-  function downloadAsPdf(index) {
-    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-    const item = history[index];
+// Download as PDF from Modal
+function downloadAsPdf(index) {
+  const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+  const item = history[index];
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
 
-    const storyWithHtml = item.story;
-    const img = new Image();
-    img.src = item.image;
+  // Get the story content as HTML
+  const storyWithHtml = item.story;
+  const img = new Image();
+  img.src = item.image;
 
-    img.onload = function () {
-      const pageWidth = pdf.internal.pageSize.width;
-      const pageHeight = pdf.internal.pageSize.height;
+  img.onload = function () {
+    // Get PDF page dimensions
+    const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
 
-      const maxImageHeight = pageHeight / 4;
-      const maxImageWidth = pageWidth - 30;
-      let imgWidth = img.width;
-      let imgHeight = img.height;
+    // Calculate image dimensions to fit within one-quarter of the page
+    const maxImageHeight = pageHeight / 4; // Maximum height is one-quarter of the page
+    const maxImageWidth = pageWidth - 30; // Leave some margin on the sides
+    let imgWidth = img.width;
+    let imgHeight = img.height;
 
-      if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
-        const widthRatio = maxImageWidth / imgWidth;
-        const heightRatio = maxImageHeight / imgHeight;
-        const scaleRatio = Math.min(widthRatio, heightRatio);
-        imgWidth *= scaleRatio;
-        imgHeight *= scaleRatio;
-      }
+    // Scale the image dimensions proportionally
+    if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
+      const widthRatio = maxImageWidth / imgWidth;
+      const heightRatio = maxImageHeight / imgHeight;
+      const scaleRatio = Math.min(widthRatio, heightRatio);
+      imgWidth *= scaleRatio;
+      imgHeight *= scaleRatio;
+    }
 
-      const imgX = (pageWidth - imgWidth) / 2;
-      const imgY = 15;
+    // Calculate the x position to center the image
+    const imgX = (pageWidth - imgWidth) / 2; // Center the image horizontally
+    const imgY = 15; // Keep the image at the top with a margin of 15
 
-      pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+    // Add the scaled and centered image to the PDF
+    pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
 
-      const storyY = imgY + imgHeight + 10;
-      pdf.html(tempContainer, {
-        callback: function (pdf) {
-          pdf.save(`blog_story_${index + 1}.pdf`);
-        },
-        x: 10,
-        y: storyY,
-        width: 180,
-        windowWidth: 800,
-        scale: 0.8,
-      });
-    };
-  }
+    // Create a temporary container to hold the HTML content
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = storyWithHtml; // Add the story HTML content
+    tempContainer.style.fontFamily = 'Arial, sans-serif'; // Optional: Set a default font family
+
+    // Render the HTML content below the image
+    const storyY = imgY + imgHeight + 10; // Position below the image
+    pdf.html(tempContainer, {
+      callback: function (pdf) {
+        // Save the PDF
+        pdf.save(`blog_story_${index + 1}.pdf`);
+      },
+      x: 10, // X offset for the text
+      y: storyY, // Y offset (below the image)
+      width: 180, // Maximum width of the content
+      windowWidth: 800, // Simulate a smaller viewport width for scaling
+      scale: 0.8, // Scale down the content to 80% of its original size
+    });
+  };
+}
 
     // Initialize
     window.onload = renderHistory;
