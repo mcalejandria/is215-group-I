@@ -7,6 +7,7 @@
   <title>Image to Blog Story - Group 1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     /* General Styles */
     body {
@@ -481,44 +482,58 @@
       document.body.removeChild(a);
     }
 
-    // Download as PDF
-    function downloadPdf() {
-      const {
-        jsPDF
-      } = window.jspdf;
-      const pdf = new jsPDF();
+  // Download as PDF
+  function downloadPdf() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
 
-      const storyContent = document.getElementById('story').innerText;
-      const imageDataUrl = generateBtn.dataset.imageData;
+    const storyContent = document.getElementById('story').innerText;
+    const imageDataUrl = generateBtn.dataset.imageData;
 
-      const img = new Image();
-      img.src = imageDataUrl;
+    const img = new Image();
+    img.src = imageDataUrl;
 
-      img.onload = function () {
-        const imgWidth = 180;
-        const imgHeight = (img.height * imgWidth) / img.width;
-        pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
+    img.onload = function () {
+      const pageWidth = pdf.internal.pageSize.width;
+      const pageHeight = pdf.internal.pageSize.height;
 
-        const storyY = 15 + imgHeight + 10;
-        const pageHeight = pdf.internal.pageSize.height;
-        const margin = 15;
-        const maxWidth = 180;
+      const maxImageHeight = pageHeight / 4;
+      const maxImageWidth = pageWidth - 30;
+      let imgWidth = img.width;
+      let imgHeight = img.height;
 
-        const lines = pdf.splitTextToSize(storyContent, maxWidth);
-        let cursorY = storyY;
+      if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
+        const widthRatio = maxImageWidth / imgWidth;
+        const heightRatio = maxImageHeight / imgHeight;
+        const scaleRatio = Math.min(widthRatio, heightRatio);
+        imgWidth *= scaleRatio;
+        imgHeight *= scaleRatio;
+      }
 
-        lines.forEach((line) => {
-          if (cursorY + 10 > pageHeight - margin) {
-            pdf.addPage();
-            cursorY = margin;
-          }
-          pdf.text(line, margin, cursorY);
-          cursorY += 10;
-        });
+      const imgX = (pageWidth - imgWidth) / 2;
+      const imgY = 15;
 
-        pdf.save('generated_blog.pdf');
-      };
-    }
+      pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+
+      const storyY = imgY + imgHeight + 10;
+      const margin = 15;
+      const maxWidth = 180;
+
+      const lines = pdf.splitTextToSize(storyContent, maxWidth);
+      let cursorY = storyY;
+
+      lines.forEach((line) => {
+        if (cursorY + 10 > pageHeight - margin) {
+          pdf.addPage();
+          cursorY = margin;
+        }
+        pdf.text(line, margin, cursorY);
+        cursorY += 10;
+      });
+
+      pdf.save('generated_blog.pdf');
+    };
+  }
 
     // Render History
     function renderHistory() {
@@ -591,53 +606,53 @@
       document.body.removeChild(a);
     }
 
-    // Download as PDF from Modal
-    function downloadAsPdf(index) {
-      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-      const item = history[index];
+  // Download as PDF from Modal
+  function downloadAsPdf(index) {
+    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+    const item = history[index];
 
-      const {
-        jsPDF
-      } = window.jspdf;
-      const pdf = new jsPDF();
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
 
-      const storyWithHtml = item.story;
-      const titleMatch = storyWithHtml.match(/<title>(.*?)<\/title>/);
-      const title = titleMatch ? titleMatch[1] : '';
+    const storyWithHtml = item.story;
+    const img = new Image();
+    img.src = item.image;
 
-      const plainTextStory = storyWithHtml
-        .replace(/<\/?[^>]+(>|$)/g, '')
-        .replace(title, '')
-        .replace(/^\s*\n+/g, '');
+    img.onload = function () {
+      const pageWidth = pdf.internal.pageSize.width;
+      const pageHeight = pdf.internal.pageSize.height;
 
-      const img = new Image();
-      img.src = item.image;
+      const maxImageHeight = pageHeight / 4;
+      const maxImageWidth = pageWidth - 30;
+      let imgWidth = img.width;
+      let imgHeight = img.height;
 
-      img.onload = function () {
-        const imgWidth = 180;
-        const imgHeight = (img.height * imgWidth) / img.width;
-        pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
+      if (imgWidth > maxImageWidth || imgHeight > maxImageHeight) {
+        const widthRatio = maxImageWidth / imgWidth;
+        const heightRatio = maxImageHeight / imgHeight;
+        const scaleRatio = Math.min(widthRatio, heightRatio);
+        imgWidth *= scaleRatio;
+        imgHeight *= scaleRatio;
+      }
 
-        const storyY = 15 + imgHeight + 10;
-        const pageHeight = pdf.internal.pageSize.height;
-        const margin = 15;
-        const maxWidth = 180;
+      const imgX = (pageWidth - imgWidth) / 2;
+      const imgY = 15;
 
-        const lines = pdf.splitTextToSize(plainTextStory, maxWidth);
-        let cursorY = storyY;
+      pdf.addImage(img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
 
-        lines.forEach((line) => {
-          if (cursorY + 10 > pageHeight - margin) {
-            pdf.addPage();
-            cursorY = margin;
-          }
-          pdf.text(line, margin, cursorY);
-          cursorY += 10;
-        });
-
-        pdf.save(`blog_story_${index + 1}.pdf`);
-      };
-    }
+      const storyY = imgY + imgHeight + 10;
+      pdf.html(tempContainer, {
+        callback: function (pdf) {
+          pdf.save(`blog_story_${index + 1}.pdf`);
+        },
+        x: 10,
+        y: storyY,
+        width: 180,
+        windowWidth: 800,
+        scale: 0.8,
+      });
+    };
+  }
 
     // Initialize
     window.onload = renderHistory;
