@@ -390,6 +390,7 @@
         storyBox.style.display = 'none';
         storyBox.innerHTML = '';
         downloadBtn.style.display = 'none';
+        document.getElementById('downloadPdfBtn').style.display = 'none';
         toneSelectorContainer.style.display = 'block'
         generateBtn.dataset.imageData = e.target.result;
         setTimeout(() => {
@@ -406,6 +407,7 @@
       downloadBtn.style.display = 'none';
       document.getElementById('downloadPdfBtn').style.display = 'none';
       loading.style.display = 'block';
+      downloadBtn.style.display = 'none';
       storyBox.style.display = 'none';
       generateBtn.disabled = true;
       storyBox.innerHTML = '';
