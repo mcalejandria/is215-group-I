@@ -404,6 +404,31 @@
       reader.readAsDataURL(file);
     }
 
+    function handleFile(file) {
+      const MAX_FILE_SIZE_MB = 5; // Set max size limit (Adjust as needed)
+      const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+  
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+          alert(`File size exceeds ${MAX_FILE_SIZE_MB}MB limit. Please upload a smaller file.`);
+          return;
+      }
+  
+      const reader = new FileReader();
+      reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          preview.style.display = 'block';
+          generateBtn.style.display = 'block';
+          storyBox.style.display = 'none';
+          storyBox.innerHTML = '';
+          generateBtn.dataset.imageData = e.target.result;
+  
+          setTimeout(() => {
+              generateBtn.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+      };
+      reader.readAsDataURL(file);
+    }
+
     // Generate Story
     async function generateStory() {
       downloadBtn.style.display = 'none';
