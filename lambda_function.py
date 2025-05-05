@@ -108,7 +108,7 @@ def lambda_handler(event, context):
                 },
                 {
                     "role": "user",
-                    "content": f"Remember, you are either an elementary, a high school, a college campus journalist OR veteran journalist and writer. Please write a good news article using the following labels as inspiration: {label_text}. If you are {tone}, the story should be written in a {tone} tone."
+                    "content": f"Remember, you are either an elementary, a high school, a college campus journalist OR veteran journalist and writer. Please write a good news article using the following labels as inspiration: {label_text}. If you are {tone}, the story should be written in a {tone} tone. This is important: DO NOT FORGET TO WRITE USING NEWS WRITING STRUCTURE. Add citations and images as well."
                 }
             ]
         }
