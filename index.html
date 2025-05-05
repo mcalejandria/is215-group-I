@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,255 +10,282 @@
   <style>
     /* General Styles */
     body {
-        font-family: 'Inter', sans-serif;
-        background: linear-gradient(135deg, #f9f9f9, #e0eafc);
-        min-height: 100vh;
-        padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f9f9f9, #e0eafc);
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .wrapper {
-        max-width: 1200px;
-        margin: auto;
-        margin-top: 50px;
-        display: flex;
+      max-width: 1200px;
+      margin: auto;
+      margin-top: 50px;
+      display: flex;
     }
 
     .sidebar {
-        width: 260px;
-        margin-right: 20px;
-        transition: 0.3s all ease;
+      width: 260px;
+      margin-right: 20px;
+      transition: 0.3s all ease;
     }
 
     .main {
-        flex: 1;
+      flex: 1;
     }
 
     .header {
-        background: #4f46e5;
-        color: #fff;
-        padding: 24px;
-        text-align: center;
+      background: #4f46e5;
+      color: #fff;
+      padding: 24px;
+      text-align: center;
     }
 
     .header h1 {
-        font-size: 24px;
+      font-size: 24px;
     }
 
     .content {
-        padding: 24px;
-        animation: fadeIn 1s ease;
+      padding: 24px;
+      animation: fadeIn 1s ease;
     }
 
     .card {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        margin-bottom: 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 20px;
     }
 
     /* Dropzone Styles */
     .dropzone {
-        border: 2px dashed #4f46e5;
-        padding: 40px;
-        text-align: center;
-        border-radius: 12px;
-        background: #f5f7ff;
-        transition: 0.3s background ease;
-        cursor: pointer;
+      border: 2px dashed #4f46e5;
+      padding: 40px;
+      text-align: center;
+      border-radius: 12px;
+      background: #f5f7ff;
+      transition: 0.3s background ease;
+      cursor: pointer;
     }
 
     .dropzone:hover {
-        background: #eef2ff;
+      background: #eef2ff;
     }
 
     .dropzone.dragover {
-        background: #dbeafe;
+      background: #dbeafe;
     }
 
     .upload-preview {
-        margin-top: 20px;
-        text-align: center;
-        animation: fadeIn 1s ease-in;
+      margin-top: 20px;
+      text-align: center;
+      animation: fadeIn 1s ease-in;
     }
 
     .upload-preview img {
-        max-width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     /* Buttons */
     .button {
-        margin-top: 20px;
-        background: #10b981;
-        color: #fff;
-        padding: 12px 24px;
-        border: none;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s background ease;
+      margin-top: 20px;
+      background: #10b981;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s background ease;
     }
 
     .button:hover {
-        background: #059669;
+      background: #059669;
     }
 
     .button-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
     }
 
     /* History Styles */
     .history-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .clear-btn {
-        font-size: 14px;
-        background: none;
-        border: none;
-        color: #ef4444;
-        cursor: pointer;
+      font-size: 14px;
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
     }
 
     .history-feed {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
     .history-thumb {
-        border-radius: 8px;
-        overflow: hidden;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        transition: 0.2s transform ease;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      transition: 0.2s transform ease;
     }
 
     .history-thumb:hover {
-        transform: scale(1.02);
+      transform: scale(1.02);
     }
 
     .history-thumb img {
-        width: 100%;
-        display: block;
+      width: 100%;
+      display: block;
     }
 
     /* Modal Styles */
     .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
     }
 
     .modal-content {
-        background: #fff;
-        padding: 30px;
-        max-width: 600px;
-        border-radius: 12px;
-        max-height: 80vh;
-        overflow-y: auto;
-        position: relative;
+      background: #fff;
+      padding: 30px;
+      max-width: 600px;
+      border-radius: 12px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
     }
 
     .close-modal {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        background: none;
-        border: none;
-        font-size: 20px;
-        color: #888;
-        cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #888;
+      cursor: pointer;
     }
 
     /* Story Styles */
     .story {
-        margin-top: 20px;
-        background: #f0fdf4;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        animation: fadeIn 1s ease;
+      margin-top: 20px;
+      background: #f0fdf4;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      animation: fadeIn 1s ease;
     }
 
     /* Loading Animation */
     .shimmer {
-        height: 150px;
-        width: 100%;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
-        background-size: 400% 100%;
-        animation: shimmer 1.4s ease infinite;
+      height: 150px;
+      width: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.4s ease infinite;
     }
 
     @keyframes shimmer {
-        0% {
-            background-position: -400px 0;
-        }
-        100% {
-            background-position: 400px 0;
-        }
+      0% {
+        background-position: -400px 0;
+      }
+
+      100% {
+        background-position: 400px 0;
+      }
     }
 
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Form Styles */
     label {
-        font-weight: 600;
-        color: #4f46e5;
-        display: block;
-        margin-bottom: 8px;
+      font-weight: 600;
+      color: #4f46e5;
+      display: block;
+      margin-bottom: 8px;
     }
 
     #toneSelector {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #4f46e5;
-        border-radius: 8px;
-        background: #f5f7ff;
-        font-size: 16px;
-        font-family: 'Inter', sans-serif;
-        cursor: pointer;
-        transition: 0.3s all ease;
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #4f46e5;
+      border-radius: 8px;
+      background: #f5f7ff;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: 0.3s all ease;
     }
 
     #toneSelector:hover {
-        background: #eef2ff;
+      background: #eef2ff;
     }
 
     #toneSelector:focus {
-        outline: none;
-        border-color: #10b981;
-        background: #dbeafe;
+      outline: none;
+      border-color: #10b981;
+      background: #dbeafe;
+    }
+
+    .tone-selector--container {
+      display: none;
+    }
+
+    .download--containers {
+      display: flex;
+      gap: 10px;
+    }
+
+    .download--containers button {
+      background-color: #fdba00;
+      color: black;
+    }
+
+    #history:not(:has(.history-thumb)) {
+      display: block;
+    }
+
+    .download--containers button:hover {
+      background-color: white;
+      color: black;
+      border: 1px solid #fdba00;
     }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
     <div class="sidebar" id="sidebar">
@@ -280,20 +308,29 @@
           <div class="upload-preview" id="preview" style="display:none">
             <img id="previewImg" src="#" alt="Preview" />
           </div>
-          <label for="toneSelector">Select Story Tone:</label>
-          <select id="toneSelector">
-            <option value="casual">Casual</option>
-            <option value="funny">Funny</option>
-            <option value="professional">Professional</option>
-          </select>
-          <div class="button-container">
-            <button class="button" id="generateBtn" onclick="generateStory()" style="display:none">✨ Generate Story</button>
-            <button class="button" id="downloadBtn" style="display:none" onclick="downloadText()">📄 Download as Text</button>
-            <button class="button" id="downloadPdfBtn" style="display:none" onclick="downloadPdf()">📄 Download as PDF</button>
+          <div class="tone-selector--container">
+
+            <br />
+            <label for="toneSelector">Select Story Tone:</label>
+            <select id="toneSelector">
+              <option value="casual">Casual</option>
+              <option value="funny">Funny</option>
+              <option value="professional">Professional</option>
+            </select>
           </div>
-          <div id="loading" style="display:none">
+          <div class="button-container">
+            <button class="button" id="generateBtn" onclick="generateStory()" style="display:none;  margin-top: 20px;">✨
+              Generate Story</button>
+            <div class="download--containers">
+              <button class="button" id="downloadBtn" style="display:none" onclick="downloadText()"> 💾 as Text</button>
+              <button class="button" id="downloadPdfBtn" style="display:none" onclick="downloadPdf()"> 💾 as
+                PDF</button>
+            </div>
+          </div>
+          <div id="loading" style="display:none;margin-top:30px;">
             <div class="shimmer"></div>
-            <p style="text-align:center; margin-top:10px; color:#4f46e5; font-weight:600;">Generating story... please wait ⏳</p>
+            <p style="text-align:center; margin-top:10px; color:#4f46e5; font-weight:600;">Generating story... please
+              wait ⏳</p>
           </div>
           <div id="story" class="story" style="display:none"></div>
         </div>
@@ -307,280 +344,301 @@
     </div>
   </div>
 
-<script>
-  const fileInput = document.getElementById('fileInput');
-  const dropzone = document.getElementById('content');
-  const preview = document.getElementById('preview');
-  const previewImg = document.getElementById('previewImg');
-  const generateBtn = document.getElementById('generateBtn');
-  const loading = document.getElementById('loading');
-  const storyBox = document.getElementById('story');
-  const historyBox = document.getElementById('history');
-  const modal = document.getElementById('modal');
-  const modalContent = document.getElementById('modalContent');
-  const downloadBtn = document.getElementById('downloadBtn');
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const dropzone = document.getElementById('content');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const generateBtn = document.getElementById('generateBtn');
+    const loading = document.getElementById('loading');
+    const storyBox = document.getElementById('story');
+    const historyBox = document.getElementById('history');
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const toneSelectorContainer = document.querySelector('.tone-selector--container');
 
-  // Drag and Drop Events
-  dropzone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropzone.classList.add('dragover');
-  });
+    // Drag and Drop Events
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
 
-  dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove('dragover');
-  });
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
 
-  dropzone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    handleFile(file);
-  });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      handleFile(file);
+    });
 
-  fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    handleFile(file);
-  });
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      handleFile(file);
+    });
 
-  // Handle File Upload
-  function handleFile(file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      previewImg.src = e.target.result;
-      preview.style.display = 'block';
-      generateBtn.style.display = 'block';
-      storyBox.style.display = 'none';
-      storyBox.innerHTML = '';
+    // Handle File Upload
+    function handleFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+        preview.style.display = 'block';
+        generateBtn.style.display = 'block';
+        storyBox.style.display = 'none';
+        storyBox.innerHTML = '';
+        downloadBtn.style.display = 'none';
+        toneSelectorContainer.style.display = 'block'
+        generateBtn.dataset.imageData = e.target.result;
+        setTimeout(() => {
+          generateBtn.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }, 100);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Generate Story
+    async function generateStory() {
       downloadBtn.style.display = 'none';
-      generateBtn.dataset.imageData = e.target.result;
+      document.getElementById('downloadPdfBtn').style.display = 'none';
+      loading.style.display = 'block';
+      storyBox.style.display = 'none';
+      generateBtn.disabled = true;
+      storyBox.innerHTML = '';
+
+      const imageDataUrl = generateBtn.dataset.imageData;
+      const base64Data = imageDataUrl.split(',')[1];
+      const selectedTone = document.getElementById('toneSelector').value;
+
       setTimeout(() => {
-        generateBtn.scrollIntoView({ behavior: 'smooth' });
+        loading.scrollIntoView({
+          behavior: 'smooth'
+        });
       }, 100);
-    };
-    reader.readAsDataURL(file);
-  }
 
-  // Generate Story
-  async function generateStory() {
-    downloadBtn.style.display = 'none';
-    document.getElementById('downloadPdfBtn').style.display = 'none';
-    loading.style.display = 'block';
-    storyBox.style.display = 'none';
-    generateBtn.disabled = true;
-    storyBox.innerHTML = '';
+      try {
+        const response = await fetch(
+          'https://kjm60kraqg.execute-api.us-east-1.amazonaws.com/default/is215-group-1', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              filename: 'uploaded_image.png',
+              content_type: 'image/png',
+              image_base64: base64Data,
+              tone: selectedTone,
+            }),
+          }
+        );
 
-    const imageDataUrl = generateBtn.dataset.imageData;
-    const base64Data = imageDataUrl.split(',')[1];
-    const selectedTone = document.getElementById('toneSelector').value;
+        const resultText = await response.text();
+        loading.style.display = 'none';
+        storyBox.innerHTML = resultText;
+        storyBox.style.display = 'block';
+        document.getElementById('downloadBtn').style.display = 'block';
+        document.getElementById('downloadPdfBtn').style.display = 'block';
+        storyBox.scrollIntoView({
+          behavior: 'smooth'
+        });
 
-    setTimeout(() => {
-      loading.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-
-    try {
-      const response = await fetch(
-        'https://kjm60kraqg.execute-api.us-east-1.amazonaws.com/default/is215-group-1',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            filename: 'uploaded_image.png',
-            content_type: 'image/png',
-            image_base64: base64Data,
-            tone: selectedTone,
-          }),
-        }
-      );
-
-      const resultText = await response.text();
-      loading.style.display = 'none';
-      storyBox.innerHTML = resultText;
-      storyBox.style.display = 'block';
-      document.getElementById('downloadBtn').style.display = 'block';
-      document.getElementById('downloadPdfBtn').style.display = 'block';
-      storyBox.scrollIntoView({ behavior: 'smooth' });
-
-      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-      history.unshift({ image: imageDataUrl, story: resultText });
-      localStorage.setItem('blogHistory', JSON.stringify(history));
-      renderHistory();
-    } catch (error) {
-      loading.style.display = 'none';
-      storyBox.innerHTML =
-        '<p style="color:red">Failed to generate story: ' + error.message + '</p>';
-      storyBox.style.display = 'block';
-    } finally {
-      generateBtn.disabled = false;
+        const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+        history.unshift({
+          image: imageDataUrl,
+          story: resultText
+        });
+        localStorage.setItem('blogHistory', JSON.stringify(history));
+        renderHistory();
+      } catch (error) {
+        loading.style.display = 'none';
+        storyBox.innerHTML =
+          '<p style="color:red">Failed to generate story: ' + error.message + '</p>';
+        storyBox.style.display = 'block';
+      } finally {
+        generateBtn.disabled = false;
+      }
     }
-  }
 
-  // Download as Text
-  function downloadText() {
-    const storyContent = document.getElementById('story').innerText;
-    const blob = new Blob([storyContent], { type: 'text/plain' });
-    const a = document.createElement('a');
-
-    a.href = URL.createObjectURL(blob);
-    a.download = 'generated_blog.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  // Download as PDF
-  function downloadPdf() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    const storyContent = document.getElementById('story').innerText;
-    const imageDataUrl = generateBtn.dataset.imageData;
-
-    const img = new Image();
-    img.src = imageDataUrl;
-
-    img.onload = function () {
-      const imgWidth = 180;
-      const imgHeight = (img.height * imgWidth) / img.width;
-      pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
-
-      const storyY = 15 + imgHeight + 10;
-      const pageHeight = pdf.internal.pageSize.height;
-      const margin = 15;
-      const maxWidth = 180;
-
-      const lines = pdf.splitTextToSize(storyContent, maxWidth);
-      let cursorY = storyY;
-
-      lines.forEach((line) => {
-        if (cursorY + 10 > pageHeight - margin) {
-          pdf.addPage();
-          cursorY = margin;
-        }
-        pdf.text(line, margin, cursorY);
-        cursorY += 10;
+    // Download as Text
+    function downloadText() {
+      const storyContent = document.getElementById('story').innerText;
+      const blob = new Blob([storyContent], {
+        type: 'text/plain'
       });
+      const a = document.createElement('a');
 
-      pdf.save('generated_blog.pdf');
-    };
-  }
-
-  // Render History
-  function renderHistory() {
-    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-    if (history.length === 0) {
-      historyBox.innerHTML =
-        '<p style="text-align:center; color:#666; font-size:14px; padding:10px;">No blog history yet.</p>';
-      return;
+      a.href = URL.createObjectURL(blob);
+      a.download = 'generated_blog.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
-    historyBox.innerHTML = history
-      .map(
-        (item, idx) => `
+
+    // Download as PDF
+    function downloadPdf() {
+      const {
+        jsPDF
+      } = window.jspdf;
+      const pdf = new jsPDF();
+
+      const storyContent = document.getElementById('story').innerText;
+      const imageDataUrl = generateBtn.dataset.imageData;
+
+      const img = new Image();
+      img.src = imageDataUrl;
+
+      img.onload = function () {
+        const imgWidth = 180;
+        const imgHeight = (img.height * imgWidth) / img.width;
+        pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
+
+        const storyY = 15 + imgHeight + 10;
+        const pageHeight = pdf.internal.pageSize.height;
+        const margin = 15;
+        const maxWidth = 180;
+
+        const lines = pdf.splitTextToSize(storyContent, maxWidth);
+        let cursorY = storyY;
+
+        lines.forEach((line) => {
+          if (cursorY + 10 > pageHeight - margin) {
+            pdf.addPage();
+            cursorY = margin;
+          }
+          pdf.text(line, margin, cursorY);
+          cursorY += 10;
+        });
+
+        pdf.save('generated_blog.pdf');
+      };
+    }
+
+    // Render History
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+      if (history.length === 0) {
+        historyBox.innerHTML =
+          '<p style="text-align:center; color:#666; font-size:14px; padding:10px;">No blog history yet.</p>';
+        return;
+      }
+      historyBox.innerHTML = history
+        .map(
+          (item, idx) => `
         <div class="history-thumb" onclick="showModal(${idx})">
           <img src="${item.image}" alt="Preview ${idx}">
         </div>
       `
-      )
-      .join('');
-  }
+        )
+        .join('');
+    }
 
-  // Clear History
-  function clearHistory() {
-    localStorage.removeItem('blogHistory');
-    renderHistory();
-  }
+    // Clear History
+    function clearHistory() {
+      localStorage.removeItem('blogHistory');
+      renderHistory();
+    }
 
-  // Show Modal
-  function showModal(index) {
-    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-    const item = history[index];
-    modalContent.innerHTML = `
+    // Show Modal
+    function showModal(index) {
+      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+      const item = history[index];
+      modalContent.innerHTML = `
       <button class='close-modal' onclick='modal.style.display="none"'>&times;</button>
       <img src="${item.image}" style="width:100%; border-radius: 8px; margin-bottom: 20px;">
       <div>${item.story}</div>
       <button class="button" onclick="downloadAsText(${index})">📄 Download as Text</button>
       <button class="button" onclick="downloadAsPdf(${index})">📄 Download as PDF</button>
     `;
-    modal.style.display = 'flex';
-  }
-
-  // Close Modal
-  function closeModal(e) {
-    if (e.target.id === 'modal') {
-      modal.style.display = 'none';
+      modal.style.display = 'flex';
     }
-  }
 
-  // Download as Text from Modal
-  function downloadAsText(index) {
-    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-    const item = history[index];
+    // Close Modal
+    function closeModal(e) {
+      if (e.target.id === 'modal') {
+        modal.style.display = 'none';
+      }
+    }
 
-    const storyWithHtml = item.story;
-    const titleMatch = storyWithHtml.match(/<title>(.*?)<\/title>/);
-    const title = titleMatch ? titleMatch[1] : '';
+    // Download as Text from Modal
+    function downloadAsText(index) {
+      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+      const item = history[index];
 
-    const plainTextStory = storyWithHtml
-      .replace(/<\/?[^>]+(>|$)/g, '')
-      .replace(title, '')
-      .replace(/^\s*\n+/g, '');
+      const storyWithHtml = item.story;
+      const titleMatch = storyWithHtml.match(/<title>(.*?)<\/title>/);
+      const title = titleMatch ? titleMatch[1] : '';
 
-    const blob = new Blob([plainTextStory], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `blog_story_${index + 1}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+      const plainTextStory = storyWithHtml
+        .replace(/<\/?[^>]+(>|$)/g, '')
+        .replace(title, '')
+        .replace(/^\s*\n+/g, '');
 
-  // Download as PDF from Modal
-  function downloadAsPdf(index) {
-    const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
-    const item = history[index];
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    const storyWithHtml = item.story;
-    const titleMatch = storyWithHtml.match(/<title>(.*?)<\/title>/);
-    const title = titleMatch ? titleMatch[1] : '';
-
-    const plainTextStory = storyWithHtml
-      .replace(/<\/?[^>]+(>|$)/g, '')
-      .replace(title, '')
-      .replace(/^\s*\n+/g, '');
-
-    const img = new Image();
-    img.src = item.image;
-
-    img.onload = function () {
-      const imgWidth = 180;
-      const imgHeight = (img.height * imgWidth) / img.width;
-      pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
-
-      const storyY = 15 + imgHeight + 10;
-      const pageHeight = pdf.internal.pageSize.height;
-      const margin = 15;
-      const maxWidth = 180;
-
-      const lines = pdf.splitTextToSize(plainTextStory, maxWidth);
-      let cursorY = storyY;
-
-      lines.forEach((line) => {
-        if (cursorY + 10 > pageHeight - margin) {
-          pdf.addPage();
-          cursorY = margin;
-        }
-        pdf.text(line, margin, cursorY);
-        cursorY += 10;
+      const blob = new Blob([plainTextStory], {
+        type: 'text/plain'
       });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `blog_story_${index + 1}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
 
-      pdf.save(`blog_story_${index + 1}.pdf`);
-    };
-  }
+    // Download as PDF from Modal
+    function downloadAsPdf(index) {
+      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+      const item = history[index];
 
-  // Initialize
-  window.onload = renderHistory;
-</script>
+      const {
+        jsPDF
+      } = window.jspdf;
+      const pdf = new jsPDF();
+
+      const storyWithHtml = item.story;
+      const titleMatch = storyWithHtml.match(/<title>(.*?)<\/title>/);
+      const title = titleMatch ? titleMatch[1] : '';
+
+      const plainTextStory = storyWithHtml
+        .replace(/<\/?[^>]+(>|$)/g, '')
+        .replace(title, '')
+        .replace(/^\s*\n+/g, '');
+
+      const img = new Image();
+      img.src = item.image;
+
+      img.onload = function () {
+        const imgWidth = 180;
+        const imgHeight = (img.height * imgWidth) / img.width;
+        pdf.addImage(img, 'JPEG', 15, 15, imgWidth, imgHeight);
+
+        const storyY = 15 + imgHeight + 10;
+        const pageHeight = pdf.internal.pageSize.height;
+        const margin = 15;
+        const maxWidth = 180;
+
+        const lines = pdf.splitTextToSize(plainTextStory, maxWidth);
+        let cursorY = storyY;
+
+        lines.forEach((line) => {
+          if (cursorY + 10 > pageHeight - margin) {
+            pdf.addPage();
+            cursorY = margin;
+          }
+          pdf.text(line, margin, cursorY);
+          cursorY += 10;
+        });
+
+        pdf.save(`blog_story_${index + 1}.pdf`);
+      };
+    }
+
+    // Initialize
+    window.onload = renderHistory;
+  </script>
 </body>
+
 </html>
