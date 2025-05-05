@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image to Blog Story - Group 1</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
+  <style>
     .header h1 {
         color: white;
     }
@@ -143,7 +143,7 @@
     .button:hover {
         background: #059669;
     }
-	
+
     .button-container {
         display: flex;
         justify-content: space-between;
@@ -269,8 +269,8 @@
         outline: none;
         border-color: #10b981;
         background: #dbeafe;
-    }	
-</style>
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
@@ -300,13 +300,13 @@
             <option value="funny">Funny</option>
             <option value="professional">Professional</option>
           </select>
-		  <div class="button-container">		  
-			<button class="button" id="generateBtn" onclick="generateStory()" style="display:none">✨ Generate Story</button>
-			<button class="button" id="downloadBtn" style="display:none" onclick="downloadText()">📄 Download as Text</button>
-		  </div>			
+          <div class="button-container">
+            <button class="button" id="generateBtn" onclick="generateStory()" style="display:none">✨ Generate Story</button>
+            <button class="button" id="downloadBtn" style="display:none" onclick="downloadText()">📄 Download as Text</button>
+          </div>
           <div id="loading" style="display:none">
             <div class="shimmer"></div>
-			<p style="text-align:center; margin-top:10px; color:#4f46e5; font-weight:600;">Generating story... please wait ⏳</p>
+            <p style="text-align:center; margin-top:10px; color:#4f46e5; font-weight:600;">Generating story... please wait ⏳</p>
           </div>
           <div id="story" class="story" style="display:none"></div>
         </div>
@@ -427,6 +427,12 @@
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+	  
+      navigator.clipboard.writeText(storyText).then(() => {
+        alert("Story copied to clipboard!");
+      }).catch((err) => {
+        alert("Failed to copy story: " + err);
+      });
     }
 
 
@@ -451,7 +457,12 @@
     function showModal(index) {
       const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
       const item = history[index];
-      modalContent.innerHTML = `<button class='close-modal' onclick='modal.style.display="none"'>&times;</button><img src="${item.image}" style="width:100%; border-radius: 8px; margin-bottom: 20px;"><div>${item.story}</div>`;
+      modalContent.innerHTML = `
+        <button class='close-modal' onclick='modal.style.display="none"'>&times;</button>
+        <img src="${item.image}" style="width:100%; border-radius: 8px; margin-bottom: 20px;">
+        <div>${item.story}</div>
+        <button class="button" onclick="downloadHistoryStory(${index})">📄 Download as Text</button>
+      `;
       modal.style.display = 'flex';
     }
 
@@ -460,6 +471,23 @@
         modal.style.display = 'none';
       }
     }
+	
+    function downloadHistoryStory(index) {
+      const history = JSON.parse(localStorage.getItem('blogHistory') || '[]');
+      const item = history[index];
+
+      // Extract only the plain text content of the story
+      const plainTextStory = item.story.replace(/<\/?[^>]+(>|$)/g, ""); // Remove any HTML tags
+
+      // Create a Blob and trigger the download
+      const blob = new Blob([plainTextStory], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `blog_story_${index + 1}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }	
 
     window.onload = renderHistory;
   </script>
